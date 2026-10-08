@@ -175,8 +175,10 @@ pip install -r requirements.txt
 
 # 4. Configure environment variables
 cp .env.example .env
-# Open .env and add your OPENAI_API_KEY
+# Open .env and set OPENROUTER_API_KEY and OPENROUTER_MODEL
 ```
+
+Get a free OpenRouter API key at [openrouter.ai](https://openrouter.ai). Free model slugs are listed at [openrouter.ai/models?q=free](https://openrouter.ai/models?q=free).
 
 ---
 
@@ -184,10 +186,13 @@ cp .env.example .env
 
 | Variable | Default | Description |
 |---|---|---|
-| `OPENAI_API_KEY` | *(required)* | Your OpenAI API key for the LLM response step |
-| `LLM_MODEL` | `gpt-4o-mini` | OpenAI model name to use for response generation |
+| `LLM_PROVIDER` | `openrouter` | LLM backend to use. Currently supported: `openrouter` |
+| `OPENROUTER_API_KEY` | *(required)* | Your OpenRouter API key |
+| `OPENROUTER_MODEL` | `nvidia/nemotron-3-super-120b-a12b:free` | Any model slug from OpenRouter (free or paid) |
 | `ROUTING_CONFIDENCE_THRESHOLD` | `0.60` | Minimum Laya confidence to act on a routing decision |
-| `LAYA_DEVICE` | `cpu` | Device for Laya inference (`cpu` or `cuda`) |
+| `LAYA_DEVICE` | `cpu` | Device for Laya inference (`cpu`, `cuda`, or `mps`) |
+
+To switch models, change only `OPENROUTER_MODEL` in `.env` — no code changes needed. To add a new provider (e.g. OpenAI, Anthropic, Gemini), add a branch in `src/llm.py` and set `LLM_PROVIDER` accordingly.
 
 ---
 
@@ -211,7 +216,7 @@ pytest tests/ -v
 
 - **Mock data only.** All transactions and refunds are in-memory. Restarting the app resets any simulated refunds.
 - **Laya model size.** The first run downloads the Laya checkpoint. A cold start may take a few seconds on CPU.
-- **LLM key required for responses.** Without a valid `OPENAI_API_KEY`, the agent still routes and gates correctly but returns a warning instead of a natural-language answer.
+- **LLM key required for responses.** Without a valid `OPENROUTER_API_KEY`, the agent still routes and gates correctly but returns a warning instead of a natural-language answer.
 - **Single-turn only.** The UI maintains a conversation history for display, but each query is processed independently — there is no multi-turn memory passed to the LLM.
 - **No authentication.** This is a local demo. Do not expose it to the public internet without adding auth.
 - **Calculator scope.** The expression parser handles `X% of Y` and basic `a ± * / b` forms. Complex nested arithmetic is not supported.
@@ -224,7 +229,7 @@ The project deliberately separates three layers:
 
 **Laya → fast bounded decisions.** Laya is a small, local decision model that takes a structured question (a `choice` with labelled criteria) and returns a typed answer with a confidence score. It never generates free text. This makes every routing and gating decision fast, auditable, and deterministic given the same input.
 
-**LLM → reasoning and generation.** The LLM (GPT-4o-mini by default) receives structured context — the user query, the tool result, and any gate outcome — and generates a concise, human-readable response. It is called exactly once per request, only after all decisions have been made.
+**LLM → reasoning and generation.** The LLM (`nvidia/nemotron-3-super-120b-a12b:free` via OpenRouter by default) receives structured context — the user query, the tool result, and any gate outcome — and generates a concise, human-readable response. It is called exactly once per request, only after all decisions have been made. The provider is configurable via `LLM_PROVIDER` in `.env`; the factory in `src/llm.py` supports adding new providers (OpenAI, Anthropic, Gemini) without touching the LangGraph graph.
 
 **Python/tools → deterministic execution.** The four tools (`transaction_lookup`, `incident_search`, `calculator`, `refund_transaction`) are plain Python functions operating on local JSON data. They have no probabilistic behaviour and return structured dicts that both Laya (for gating context) and the LLM (for summarisation) can consume.
 

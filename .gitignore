@@ -1,0 +1,33 @@
+# Environment — NEVER commit secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Pytest / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Streamlit
+.streamlit/
+
+# HuggingFace model cache (large, downloaded at runtime)
+# Uncomment if you want to explicitly exclude:
+# ~/.cache/huggingface/
+
+# IDE
+.vscode/
+.idea/
+*.swp
