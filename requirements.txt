@@ -1,0 +1,9 @@
+laya>=0.4.0
+langgraph>=0.2.0
+langchain-core>=0.3.0
+langchain-openai>=0.2.0
+streamlit>=1.39.0
+python-dotenv>=1.0.0
+pandas>=2.0.0
+pytest>=8.0.0
+pytest-mock>=3.14.0

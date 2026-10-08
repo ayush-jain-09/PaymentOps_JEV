@@ -1,0 +1,112 @@
+[
+  {
+    "id": "TX-1001",
+    "amount": 2499.00,
+    "currency": "INR",
+    "status": "completed",
+    "error_code": null,
+    "merchant": "Flipkart India Pvt Ltd",
+    "timestamp": "2024-03-15T10:22:31Z",
+    "failure_reason": null
+  },
+  {
+    "id": "TX-1002",
+    "amount": 8750.50,
+    "currency": "INR",
+    "status": "completed",
+    "error_code": null,
+    "merchant": "Amazon Seller Services",
+    "timestamp": "2024-04-02T14:05:17Z",
+    "failure_reason": null
+  },
+  {
+    "id": "TX-1003",
+    "amount": 1199.00,
+    "currency": "INR",
+    "status": "failed",
+    "error_code": "E002",
+    "merchant": "Zomato Ltd",
+    "timestamp": "2024-04-10T19:45:03Z",
+    "failure_reason": "Gateway timeout — upstream payment processor did not respond"
+  },
+  {
+    "id": "TX-1004",
+    "amount": 3299.00,
+    "currency": "INR",
+    "status": "refunded",
+    "error_code": null,
+    "merchant": "Myntra Designs Pvt Ltd",
+    "timestamp": "2024-05-01T08:30:55Z",
+    "failure_reason": null
+  },
+  {
+    "id": "TX-1005",
+    "amount": 599.00,
+    "currency": "INR",
+    "status": "completed",
+    "error_code": null,
+    "merchant": "Swiggy",
+    "timestamp": "2024-05-12T12:00:00Z",
+    "failure_reason": null
+  },
+  {
+    "id": "TX-1006",
+    "amount": 14999.00,
+    "currency": "INR",
+    "status": "failed",
+    "error_code": "E001",
+    "merchant": "Croma Retail",
+    "timestamp": "2024-06-03T17:22:10Z",
+    "failure_reason": "Duplicate capture — transaction was submitted twice within 60 seconds"
+  },
+  {
+    "id": "TX-1007",
+    "amount": 450.00,
+    "currency": "INR",
+    "status": "pending",
+    "error_code": null,
+    "merchant": "BookMyShow",
+    "timestamp": "2024-06-18T21:10:44Z",
+    "failure_reason": null
+  },
+  {
+    "id": "TX-1008",
+    "amount": 6799.00,
+    "currency": "INR",
+    "status": "failed",
+    "error_code": "E004",
+    "merchant": "Nykaa Fashion",
+    "timestamp": "2024-07-05T09:14:29Z",
+    "failure_reason": "Network error — connection to payment gateway dropped mid-transaction"
+  },
+  {
+    "id": "TX-1009",
+    "amount": 22450.00,
+    "currency": "INR",
+    "status": "failed",
+    "error_code": "E005",
+    "merchant": "Reliance Digital",
+    "timestamp": "2024-08-20T16:55:08Z",
+    "failure_reason": "Settlement mismatch — captured amount differs from authorized amount"
+  },
+  {
+    "id": "TX-1010",
+    "amount": 3750.00,
+    "currency": "INR",
+    "status": "completed",
+    "error_code": null,
+    "merchant": "Ajio Lifestyle",
+    "timestamp": "2024-09-11T11:30:22Z",
+    "failure_reason": null
+  },
+  {
+    "id": "TX-1042",
+    "amount": 4999.00,
+    "currency": "INR",
+    "status": "failed",
+    "error_code": "E003",
+    "merchant": "Paytm Mall",
+    "timestamp": "2024-10-01T13:47:59Z",
+    "failure_reason": "Issuer declined the transaction"
+  }
+]

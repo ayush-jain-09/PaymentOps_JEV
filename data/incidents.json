@@ -1,0 +1,50 @@
+[
+  {
+    "id": "INC-001",
+    "title": "Duplicate Capture",
+    "error_code": "E001",
+    "description": "A duplicate capture occurs when the same transaction is submitted to the payment gateway more than once within a short window (typically 60 seconds). This usually happens due to retry logic in the merchant's checkout system or a double-click on the submit button. The gateway rejects the second capture to prevent double-charging the customer.",
+    "resolution": "Identify the duplicate transaction ID and void the second capture immediately using the gateway dashboard. Review the merchant's retry and idempotency configuration to ensure a unique transaction key is sent per payment attempt. Contact the merchant to update their integration if the issue is recurring.",
+    "affected_merchants": ["Croma Retail", "Tata CLiQ", "Reliance Digital"]
+  },
+  {
+    "id": "INC-002",
+    "title": "Gateway Timeout",
+    "error_code": "E002",
+    "description": "A gateway timeout error occurs when the upstream payment processor does not respond within the configured timeout window (usually 30 seconds). This can be caused by high traffic on the processor network, a temporary outage, or network latency between the gateway and the acquirer. The transaction is left in an indeterminate state until the processor confirms or denies it.",
+    "resolution": "Check the gateway status page and processor health dashboard for ongoing incidents. Query the payment processor's inquiry API to determine the final transaction status before initiating any retry. If the timeout persists, escalate to the acquiring bank's technical support team and advise the merchant to hold retries for at least 5 minutes.",
+    "affected_merchants": ["Zomato Ltd", "Swiggy", "Ola"]
+  },
+  {
+    "id": "INC-003",
+    "title": "Issuer Decline",
+    "error_code": "E003",
+    "description": "An issuer decline means the customer's card-issuing bank rejected the authorization request. Common reasons include insufficient funds, a frozen account, a card flagged for suspicious activity, or the issuer's fraud rules being triggered. The decline is soft (retriable) or hard (permanent) depending on the reason code returned.",
+    "resolution": "Check the decline reason code provided in the gateway response to distinguish soft from hard declines. Soft declines (e.g., insufficient funds) can be retried after the customer resolves the issue with their bank. Hard declines (e.g., card reported stolen) should not be retried — advise the customer to use an alternate payment method or contact their bank.",
+    "affected_merchants": ["Paytm Mall", "Flipkart India Pvt Ltd", "Amazon Seller Services"]
+  },
+  {
+    "id": "INC-004",
+    "title": "Network Error",
+    "error_code": "E004",
+    "description": "A network error occurs when the TCP/IP connection between the merchant's server and the payment gateway is interrupted mid-transaction. This can result from firewall drops, load balancer timeouts, or ISP instability. The transaction may be partially processed, making the final state unknown without an explicit status check.",
+    "resolution": "Use the gateway's transaction inquiry endpoint with the original merchant reference ID to confirm whether the authorization was completed before the connection dropped. If no record is found, the transaction can be safely retried. Advise the merchant to implement idempotency keys and exponential backoff retry logic to reduce the impact of transient network failures.",
+    "affected_merchants": ["Nykaa Fashion", "Meesho", "AJIO"]
+  },
+  {
+    "id": "INC-005",
+    "title": "Settlement Mismatch",
+    "error_code": "E005",
+    "description": "A settlement mismatch arises when the amount settled by the acquiring bank differs from the amount that was originally authorized and captured. This discrepancy can occur due to currency conversion rounding, partial refunds applied outside the system, or processing errors during the batch settlement run. Persistent mismatches affect reconciliation and can trigger compliance reviews.",
+    "resolution": "Pull the full transaction audit trail including authorization, capture, and settlement records and compare them line by line. Raise a chargeback investigation or settlement dispute with the acquiring bank providing the discrepancy details. Update your reconciliation scripts to flag amount deviations above a configurable threshold (e.g., ₹1 or 0.1%) for automatic review.",
+    "affected_merchants": ["Reliance Digital", "Vijay Sales", "Croma Retail"]
+  },
+  {
+    "id": "INC-006",
+    "title": "Card Expired",
+    "error_code": "E006",
+    "description": "A card expired error is returned when the customer attempts to pay using a card whose expiry date has passed. The issuing bank or the payment gateway validates the expiry date at the time of authorization and declines transactions on expired cards. This error is a hard decline and the transaction cannot be retried with the same card details.",
+    "resolution": "Prompt the customer to update their saved card details or use a new card. If the merchant stores card tokens for subscriptions, trigger a card-update flow using the network's account updater service (e.g., Visa Account Updater) to automatically refresh expired card information. Ensure your checkout UI validates card expiry client-side before submission to reduce unnecessary authorization attempts.",
+    "affected_merchants": ["BookMyShow", "Netflix India", "Hotstar"]
+  }
+]
